@@ -31,20 +31,22 @@ jobs:
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-        NEW_VERSION: ${{steps.version.outputs.version}}
       run: |  #sumbolo de la tuberia signific lineas que se van a ingresar de manera manual en la consola
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo "New version: $NEW_VERSION!!!!"
 
-    # - name: Build Docker Image
-    #   run: |
-    #     docker build -t juanpedroza/docker-graphql:0.0.2 .
-    #     docker build -t juanpedroza/docker-graphql:latest .
+    - name: Build Docker Image
+      env:
+        NEW_VERSION: ${{steps.version.outputs.version}}
+      run: |
+        docker build -t juanpedroza/docker-graphql:$NEW_VERSION .
+        docker build -t juanpedroza/docker-graphql:latest .
 
-    # - name: Push Docker Image
-    #   run: |
-    #     docker push juanpedroza/docker-graphql:0.0.2
-    #     docker push juanpedroza/docker-graphql:latest
+    - name: Push Docker Image
+       env:
+        NEW_VERSION: ${{steps.version.outputs.version}}
+      run: |
+        docker push juanpedroza/docker-graphql:$NEW_VERSION
+        docker push juanpedroza/docker-graphql:latest
             
       
         
